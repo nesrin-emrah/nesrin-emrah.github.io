@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nesrin & Emrah | Düğün Davetiyesi</title>
+    <meta
+      name="description"
+      content="Düğün günümüzde bizimle olmanızdan mutluluk duyarız."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Pinyon+Script&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero" id="top">
+        <div class="hero-texture"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-frame outer"></div>
+        <div class="hero-frame inner"></div>
+
+        <nav class="topbar">
+          <a class="brand" href="#top">Davetiye</a>
+          <div class="menu">
+            <a href="#akis">Program</a>
+            <a href="#mekan">Mekan</a>
+            <a href="#yukleme">Yükleme</a>
+          </div>
+        </nav>
+
+        <div class="hero-invite">
+          <p class="hero-announce">Düğünümüz var!</p>
+          <div class="hero-names">
+            <span class="hero-name first">Nesrin</span>
+            <span class="hero-name second">&nbsp;Emrah</span>
+            <span class="sparkles" aria-hidden="true">
+              <i style="--x: 4%; --y: 8%; --s: 0.9; --d: 0.9s"></i>
+              <i style="--x: 22%; --y: -6%; --s: 1.2; --d: 1.6s"></i>
+              <i style="--x: 58%; --y: 2%; --s: 0.7; --d: 2.2s"></i>
+              <i style="--x: 88%; --y: 14%; --s: 1.1; --d: 2.8s"></i>
+              <i style="--x: 94%; --y: 58%; --s: 0.8; --d: 3.4s"></i>
+              <i style="--x: 70%; --y: 88%; --s: 1.3; --d: 2.5s"></i>
+              <i style="--x: 34%; --y: 96%; --s: 0.8; --d: 4s"></i>
+              <i style="--x: -2%; --y: 62%; --s: 1; --d: 3.1s"></i>
+            </span>
+          </div>
+          <img
+            class="hero-couple"
+            src="./assets/design/couple.png"
+            alt="Nesrin ve Emrah çizimi"
+          />
+          <div class="hero-parents">
+            <span>Binnaz &amp; Beysim</span>
+            <span>Bediha &amp; Mehmet</span>
+          </div>
+          <div class="hero-schedule">
+            <div class="hero-date">12. 09. 2026</div>
+            <div class="hero-time">Cumartesi&nbsp; Saat: 19:00</div>
+            <div class="hero-venue">
+              Yer: TUZLA ÖZEL EĞİTİM MERKEZİ KOMUTANLIĞI (Tuzla Ordu Evi)
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="#mekan">Konuma Git</a>
+            <a class="button secondary" href="#rsvp">Katilim Bilgisi</a>
+          </div>
+          <div class="hero-countdown">
+            <p class="countdown-label">Nikah günümüze kalan süre</p>
+            <div class="countdown" data-target-date="2026-09-12T19:00:00">
+              <div><strong data-unit="days">00</strong><span>Gün</span></div>
+              <div><strong data-unit="hours">00</strong><span>Saat</span></div>
+              <div><strong data-unit="minutes">00</strong><span>Dakika</span></div>
+              <div><strong data-unit="seconds">00</strong><span>Saniye</span></div>
+            </div>
+          </div>
+        </div>
+
+        <a
+          class="hero-qr"
+          href="https://share.google/aiDQ2KtdEt3Rl4tH8"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <img src="./assets/design/qr.png" alt="Konum QR kodu" />
+          <span>Yol tarifi</span>
+        </a>
+      </header>
+
+      <main>
+        <section class="section intro">
+          <div class="section-heading">
+            <p class="eyebrow">Davet</p>
+            <h2>Sizleri aramızda görmek isteriz</h2>
+          </div>
+          <p class="intro-copy">
+            13 yıllık yolculuğumuzu evlilikle taçlandırırken, ailelerimizin ve
+            sevdiklerimizin şahitliğinde bu güzel anı birlikte yaşamak istiyoruz.
+            Bu özel günde aramızda olmanız en değerli hediyemiz olacak.
+          </p>
+        </section>
+
+        <section class="section timeline" id="akis">
+          <div class="section-heading">
+            <p class="eyebrow">Program</p>
+            <h2>Gün akışı</h2>
+          </div>
+
+          <div class="timeline-list">
+            <article class="timeline-item">
+              <strong>19:00</strong>
+              <div>
+                <h3>Karşılama</h3>
+                <p>Misafirlerin alana gelişi ve karşılama.</p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <strong>19:30</strong>
+              <div>
+                <h3>Nikah Seremonisi</h3>
+                <p>Nikah töreni ve aile fotoğraf çekimi.</p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <strong>20:30</strong>
+              <div>
+                <h3>Yemek ve Kutlama</h3>
+                <p>Akşam yemeği, müzik ve kutlama.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="section venue" id="mekan">
+          <div class="section-heading">
+            <p class="eyebrow">Mekan</p>
+            <h2>TUZLA ÖZEL EĞİTİM MERKEZİ KOMUTANLIĞI (Tuzla Ordu Evi)</h2>
+          </div>
+
+          <div class="venue-grid">
+            <div class="venue-card">
+              <h3>Adres</h3>
+              <p>TUZLA ÖZEL EĞİTİM MERKEZİ KOMUTANLIĞI (Tuzla Ordu Evi)</p>
+              <p class="muted">
+                Harita bağlantısını butonlara ekleyerek misafirlerinizi kolayca
+                yönlendirebilirsiniz.
+              </p>
+              <div class="button-row">
+                <a class="button primary" href="https://share.google/aiDQ2KtdEt3Rl4tH8" target="_blank" rel="noreferrer">
+                  Google Maps
+                </a>
+                <a class="button secondary" href="https://share.google/aiDQ2KtdEt3Rl4tH8" target="_blank" rel="noreferrer">
+                  Konumu Aç
+                </a>
+              </div>
+            </div>
+
+            <div class="note-card">
+              <h3>Küçük Notlar</h3>
+              <ul>
+                <li>Otopark ücretsiz.</li>
+                <li>Orduevi girişinde kimliğinizi hazır bulundurun, kimlik kontrolü ile giriş sağlanıyor.</li>
+                <li>Dress code: Hepiniz çok güzelsiniz :)</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section upload" id="yukleme">
+          <div class="section-heading">
+            <p class="eyebrow">Anılar</p>
+            <h2>Fotoğraf ve videolarınızı bizimle paylaşın</h2>
+          </div>
+
+          <div class="upload-grid">
+            <div class="upload-card">
+              <h3>Yükleme Alanı</h3>
+              <p>
+                Düğünde çektiğiniz fotoğrafları ve videoları doğrudan bu form
+                üzerinden bize iletebilirsiniz.
+              </p>
+
+              <form class="upload-form" id="upload-form">
+                <label class="field">
+                  <span>Adınız</span>
+                  <input
+                    type="text"
+                    name="guestName"
+                    placeholder="Örnek: Zeynep & Ahmet"
+                    maxlength="80"
+                  />
+                </label>
+
+                <label class="field">
+                  <span>Kısa notunuz</span>
+                  <textarea
+                    name="guestMessage"
+                    placeholder="Güzel anılarla birlikte sevgilerimizi de bırakıyoruz..."
+                    rows="4"
+                    maxlength="240"
+                  ></textarea>
+                </label>
+
+                <label class="field">
+                  <span>Fotoğraf ve videolar</span>
+                  <input
+                    type="file"
+                    id="media-files"
+                    name="mediaFiles"
+                    accept="image/*,video/*"
+                    multiple
+                    required
+                  />
+                </label>
+
+                <div class="upload-actions">
+                  <button class="button primary" type="submit" id="upload-button">
+                    Yüklemeyi Başlat
+                  </button>
+                  <p class="upload-hint">
+                    Çoklu seçim desteklenir. Büyük videolarda yükleme biraz zaman
+                    alabilir.
+                  </p>
+                </div>
+
+                <div class="upload-status" id="upload-status" aria-live="polite">
+                  Supabase ayarları yapıldıktan sonra bu alan yükleme durumunu
+                  gösterecek.
+                </div>
+
+                <div class="upload-progress" id="upload-progress"></div>
+              </form>
+            </div>
+
+            <div class="note-card">
+              <h3>Misafirlere Not</h3>
+              <ul>
+                <li>Yatay videolar yüklenirse daha iyi olur.</li>
+                <li>Toplu yükleme için birden fazla dosya seçilebilir.</li>
+                <li>Form, fotoğraf ve videoları otomatik olarak bulut depoya atar.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section quote">
+          <blockquote>
+            "Aşkın en güzel hâli, aynı hayale birlikte yürüyebilmektir."
+          </blockquote>
+        </section>
+
+        <section class="section rsvp" id="rsvp">
+          <div class="section-heading">
+            <p class="eyebrow">Katılım</p>
+            <h2>Davetimize katılacak mısınız?</h2>
+          </div>
+
+          <div class="rsvp-card">
+            <p>
+              Katılım durumunuzu 1 Eylül 2026 tarihine kadar bizimle
+              paylaşırsanız çok seviniriz.
+            </p>
+
+            <form class="rsvp-form" id="rsvp-form" method="POST" action="">
+              <label class="field">
+                <span>Ad Soyad</span>
+                <input
+                  type="text"
+                  name="fullName"
+                  id="rsvp-full-name"
+                  placeholder="Örnek: Ayşe Yılmaz"
+                  maxlength="100"
+                  required
+                />
+              </label>
+
+              <div class="field">
+                <span>Katılacak mısınız?</span>
+                <div class="choice-grid">
+                  <label class="choice-card">
+                    <input type="radio" name="attendance" value="Evet" required />
+                    <span>Evet, katılacağım</span>
+                  </label>
+                  <label class="choice-card">
+                    <input type="radio" name="attendance" value="Hayır" required />
+                    <span>Hayır, katılamayacağım</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field is-hidden" id="guest-count-field">
+                <span>Kaç kişi olacaksınız?</span>
+                <div class="choice-grid count-grid">
+                  <label class="choice-card">
+                    <input type="radio" name="guestCount" value="1" />
+                    <span>1</span>
+                  </label>
+                  <label class="choice-card">
+                    <input type="radio" name="guestCount" value="2" />
+                    <span>2</span>
+                  </label>
+                  <label class="choice-card">
+                    <input type="radio" name="guestCount" value="3" />
+                    <span>3</span>
+                  </label>
+                  <label class="choice-card">
+                    <input type="radio" name="guestCount" value="4" />
+                    <span>4</span>
+                  </label>
+                  <label class="choice-card">
+                    <input type="radio" name="guestCount" value="5+" />
+                    <span>5+</span>
+                  </label>
+                </div>
+              </div>
+
+              <input type="hidden" name="Ad Soyad" id="rsvp-hidden-name" />
+              <input type="hidden" name="Katılım Durumu" id="rsvp-hidden-attendance" />
+              <input type="hidden" name="Kişi Sayısı" id="rsvp-hidden-count" />
+              <input type="hidden" name="_subject" value="Yeni Düğün Katılım Yanıtı" />
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_next" id="rsvp-next" value="" />
+
+              <div class="upload-actions">
+                <button class="button primary" type="submit" id="rsvp-button">
+                  Gönder
+                </button>
+              </div>
+
+              <div class="upload-status" id="rsvp-status" aria-live="polite">
+                RSVP formu hazır. E-posta adresi tanımlandıktan sonra aktif olacaktır.
+              </div>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <p>Nesrin & Emrah</p>
+        <p>Sevgiyle bekliyoruz.</p>
+      </footer>
+    </div>
+
+    <script src="./config.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

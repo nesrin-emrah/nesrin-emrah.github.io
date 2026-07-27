@@ -1,68 +1,41 @@
-# Wedding Invitation Template
+# Nesrin & Emrah — Düğün Davetiyesi
 
-Bu klasor, duzenlemesi kolay bir dugun davetiye sitesi taslagi icerir.
+Nesrin ve Emrah'ın düğün davetiye sitesi. **Canlı:** https://nesrin-emrah.github.io/
+
+- **Düğün:** 12 Eylül 2026 Cumartesi, 19:00 — Tuzla Özel Eğitim Merkezi Komutanlığı (Tuzla Ordu Evi)
+
+## Özellikler
+
+- Basılı davetiye tasarımından birebir uyarlanan hero (yağlıboya doku, çift çerçeve, el yazısı isimler)
+- İsimlerde kalemle yazılıyormuş gibi write-on animasyonu ve parıltı efektleri
+- Tıklamada havai fişek parçacık efekti, fare izinde ince parıltı
+- Nikaha geri sayım
+- Program akışı, mekan ve yol tarifi (Google Maps + QR)
+- Misafirlerden fotoğraf/video toplama (Supabase Storage)
+- RSVP katılım formu
 
 ## Dosyalar
 
-- `index.html`: Tum icerik alanlari burada.
-- `styles.css`: Renkler, tipografi ve yerlesim.
-- `script.js`: Geri sayim alani.
+- `index.html` — tüm içerik
+- `styles.css` — tasarım (davetiye paleti `:root` değişkenlerinde)
+- `script.js` — geri sayım, yükleme/RSVP formları, animasyon efektleri
+- `config.js` — Supabase ayarları (publishable anon key; erişim RLS politikalarıyla korunur)
+- `supabase-policies.sql` — Storage yükleme politikaları
 
-## Ilk Duzenlenecek Alanlar
+## Yayınlama
 
-`index.html` icinde asagidaki yer tutuculari degistir:
+Site GitHub Pages'ten `main` dalı kökünden yayınlanır. Değişiklik için:
 
-- `[Gelin Adi]`
-- `[Damat Adi]`
-- `[Mekan Adi]`
-- `[Mahalle / Sokak / Ilce / Sehir]`
-- `[Telefon Numarasi]`
-- `[E-posta Adresi]`
+```sh
+git add -A && git commit -m "..." && git push
+```
 
-## Hizli Kisisellestirme
+Push sonrası Pages birkaç dakika içinde otomatik güncellenir.
 
-- Tarihi degistirmek icin `data-target-date` alanini guncelle.
-- Harita icin `href="#"` olan linklere kendi konum linklerini yapistir.
-- Yukleme alani icin `Fotograf / Video Yukle` butonuna Google Drive, Dropbox File Request, WeTransfer Portals ya da benzeri bir link ekleyebilirsin.
-- Galeri alaninda `Foto 01` gibi kutularin yerine `img` etiketi koyarak kendi fotograflarini ekle.
-- Renkleri degistirmek icin `styles.css` icindeki `:root` altindaki degiskenleri duzenle.
+## Yerelde Çalıştırma
 
-## Fotograf ve Video Toplama
+Statik sitedir; herhangi bir HTTP sunucusu yeterli:
 
-Bu surum, Supabase ile ucretsiz planda calisabilecek sekilde hazirlandi.
-
-## Supabase ile Ucretsiz Kurulum
-
-1. [Supabase](https://supabase.com/) uzerinden ucretsiz bir proje olustur.
-2. `Storage` altinda ornegin `wedding-media` isimli bir bucket ac.
-3. Bucket'i `public` yapma. Dosyalar misafirler tarafindan yuklenecek ama herkese acik olmak zorunda degil.
-4. Masaustundeki template klasorunde `config.example.js` dosyasini kopyalayip `config.js` yap.
-5. `config.js` icine `Project URL`, `anon public key`, `bucket` adini yaz.
-6. Supabase SQL Editor icinde `supabase-policies.sql` dosyasindaki sorgulari calistir.
-7. Siteyi yayinla ve formu test et.
-
-## Gerekli Dosyalar
-
-- `config.js`: Sana ozel Supabase ayarlari burada olacak.
-- `script.js`: Yükleme formu buradan Supabase'e dosya yollar.
-- `supabase-policies.sql`: Upload icin gerekli temel policy ornekleri.
-
-## Notlar
-
-- Ucretsiz planda baslangic icin yeterlidir.
-- Cok buyuk videolarda misafirlerin internet hizina gore yukleme suresi uzayabilir.
-- Istersen daha sonra admin paneli veya galeri sayfasi da ekleyebiliriz.
-
-## Alternatifler
-
-- Google Drive paylasim klasoru veya Google Form dosya yukleme
-- Dropbox File Request
-- WeTransfer Portals
-
-## Onemli
-
-Supabase tarafinda `Storage` politikalari ayarlanmadan yukleme calismaz. Bu repo icine hazir bir SQL dosyasi eklendi.
-
-## Calistirma
-
-`index.html` dosyasini tarayicida acman yeterli.
+```sh
+python3 -m http.server 8000   # http://localhost:8000
+```

@@ -270,6 +270,17 @@ img {
   line-height: 1.25;
 }
 
+.parent-pair {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.parent-surname {
+  letter-spacing: 0.04em;
+}
+
 .hero-schedule {
   margin-top: 26px;
   display: flex;
@@ -783,7 +794,7 @@ textarea {
   .hero-parents {
     flex-direction: column;
     align-items: center;
-    gap: 4px;
+    gap: 14px;
   }
 
   .hero-qr {

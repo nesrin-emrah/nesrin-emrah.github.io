@@ -1,6 +1,8 @@
+// Yeni Supabase projesi acildiktan sonra url ve anonKey doldurulacak.
+// Bu alanlar bosken fotograf yukleme formu kendini otomatik devre disi birakir.
 window.SUPABASE_CONFIG = {
-  url: "https://bummpphgdjbbragjddju.supabase.co",
-  anonKey: "sb_publishable_1fqL-evv2kjo7My7xPFiog_ThzvNveK",
+  url: "",
+  anonKey: "",
   bucket: "wedding-media",
   folder: "guest-uploads",
 };

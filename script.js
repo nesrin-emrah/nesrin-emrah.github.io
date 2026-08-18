@@ -9,10 +9,16 @@ const rsvpButton = document.querySelector("#rsvp-button");
 const guestCountField = document.querySelector("#guest-count-field");
 const attendanceInputs = document.querySelectorAll('input[name="attendance"]');
 const guestCountInputs = document.querySelectorAll('input[name="guestCount"]');
-const rsvpHiddenName = document.querySelector("#rsvp-hidden-name");
-const rsvpHiddenAttendance = document.querySelector("#rsvp-hidden-attendance");
-const rsvpHiddenCount = document.querySelector("#rsvp-hidden-count");
-const rsvpNext = document.querySelector("#rsvp-next");
+// Supabase istemcisi: config eksikse null doner, formlar kendini devre disi birakir.
+const getSupabaseClient = () => {
+  const config = window.SUPABASE_CONFIG;
+
+  if (!config || !config.url || !config.anonKey || !window.supabase) {
+    return null;
+  }
+
+  return window.supabase.createClient(config.url, config.anonKey);
+};
 
 const setUploadStatus = (message, state = "") => {
   if (!uploadStatus) {
@@ -140,91 +146,65 @@ if (rsvpForm) {
   rsvpForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const rsvpEmail = window.SITE_CONFIG?.rsvpEmail?.trim();
+    const client = getSupabaseClient();
 
-    if (!rsvpEmail) {
+    if (!client) {
       setRsvpStatus(
-        "RSVP henüz aktif değil. Önce config.js içine rsvpEmail bilgisini eklemelisin.",
+        "Katılım formu şu an aktif değil. Lütfen daha sonra tekrar deneyin.",
         "is-error"
       );
       return;
     }
 
     const formData = new FormData(rsvpForm);
-    const attendance = formData.get("attendance");
+    const fullName = (formData.get("fullName") || "").toString().trim();
+    const attendance = (formData.get("attendance") || "").toString();
     const guestCount = formData.get("guestCount");
+
+    if (fullName.length < 2) {
+      setRsvpStatus("Lütfen ad soyad bilginizi yazın.", "is-error");
+      return;
+    }
+
+    if (!attendance) {
+      setRsvpStatus("Lütfen katılım durumunuzu seçin.", "is-error");
+      return;
+    }
 
     if (attendance === "Evet" && !guestCount) {
       setRsvpStatus("Lütfen kaç kişi olacağınızı seçin.", "is-error");
       return;
     }
 
-    if (rsvpHiddenName) {
-      rsvpHiddenName.value = (formData.get("fullName") || "").toString().trim();
-    }
-
-    if (rsvpHiddenAttendance) {
-      rsvpHiddenAttendance.value = attendance;
-    }
-
-    if (rsvpHiddenCount) {
-      rsvpHiddenCount.value = attendance === "Evet" ? guestCount : "Katılmıyor";
-    }
-
-    if (rsvpNext) {
-      const nextUrl = window.location.protocol.startsWith("http")
-        ? `${window.location.origin}${window.location.pathname}#rsvp`
-        : "";
-      rsvpNext.value = nextUrl;
-    }
-
-    rsvpForm.action = `https://formsubmit.co/${rsvpEmail}`;
+    // "5+" secenegi veritabaninda 5 olarak saklanir (5 ve uzeri anlaminda).
+    const guestCountValue =
+      attendance === "Evet"
+        ? Number.parseInt(guestCount.toString(), 10) || 1
+        : null;
 
     if (rsvpButton) {
       rsvpButton.disabled = true;
     }
 
-    const isServedOverHttp = window.location.protocol === "http:" || window.location.protocol === "https:";
-
-    if (!isServedOverHttp) {
-      setRsvpStatus(
-        "Bu formun site içinde gönderilebilmesi için sayfanın bir web adresinden açılması gerekiyor. Şu an dosya olarak açık.",
-        "is-error"
-      );
-      if (rsvpButton) {
-        rsvpButton.disabled = false;
-      }
-      return;
-    }
-
     setRsvpStatus("Yanıtınız gönderiliyor...");
 
-    const payload = new FormData();
-    payload.append("Ad Soyad", rsvpHiddenName ? rsvpHiddenName.value : "");
-    payload.append(
-      "Katılım Durumu",
-      rsvpHiddenAttendance ? rsvpHiddenAttendance.value : ""
-    );
-    payload.append("Kişi Sayısı", rsvpHiddenCount ? rsvpHiddenCount.value : "");
-    payload.append("_subject", "Yeni Düğün Katılım Yanıtı");
-    payload.append("_captcha", "false");
-    payload.append("_template", "table");
-
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${rsvpEmail}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
-        body: payload,
-      });
+      const { error } = await client
+        .from(window.SUPABASE_CONFIG.rsvpTable || "rsvps")
+        .insert({
+          full_name: fullName,
+          attendance,
+          guest_count: guestCountValue,
+        });
 
-      if (!response.ok) {
-        throw new Error("Gönderim başarısız oldu");
+      if (error) {
+        throw error;
       }
 
       setRsvpStatus(
-        "Yanıtınız başarıyla gönderildi. Teşekkür ederiz.",
+        attendance === "Evet"
+          ? "Teşekkür ederiz, yanıtınızı aldık. Sizi aramızda görmek için sabırsızlanıyoruz."
+          : "Yanıtınız için teşekkür ederiz. Sizi özleyeceğiz.",
         "is-success"
       );
       rsvpForm.reset();
@@ -251,14 +231,11 @@ if (uploadForm) {
   uploadForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (
-      !window.SUPABASE_CONFIG ||
-      !window.SUPABASE_CONFIG.url ||
-      !window.SUPABASE_CONFIG.anonKey ||
-      !window.SUPABASE_CONFIG.bucket
-    ) {
+    const client = getSupabaseClient();
+
+    if (!client || !window.SUPABASE_CONFIG.bucket) {
       setUploadStatus(
-        "Yükleme henüz aktif değil. Önce config.js içindeki Supabase bilgilerini doldurman gerekiyor.",
+        "Yükleme şu an aktif değil. Lütfen daha sonra tekrar deneyin.",
         "is-error"
       );
       return;
@@ -277,8 +254,7 @@ if (uploadForm) {
     const guestName = (formData.get("guestName") || "").toString().trim();
     const guestMessage = (formData.get("guestMessage") || "").toString().trim();
 
-    const { url, anonKey, bucket, folder } = window.SUPABASE_CONFIG;
-    const client = window.supabase.createClient(url, anonKey);
+    const { bucket, folder } = window.SUPABASE_CONFIG;
     const guestSlug = slugify(guestName || "misafir");
     const batchId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
@@ -291,6 +267,8 @@ if (uploadForm) {
     }
 
     setUploadStatus("Yükleme başlatıldı. Dosyalar sırayla gönderiliyor...");
+
+    const uploadedPaths = [];
 
     try {
       for (const file of files) {
@@ -318,11 +296,32 @@ if (uploadForm) {
         if (error) {
           throw error;
         }
+
+        uploadedPaths.push(path);
+      }
+
+      // Misafirin adi ve notu dosyalarla birlikte kaydedilir.
+      let noteSaved = true;
+
+      if (uploadedPaths.length && (guestName || guestMessage)) {
+        const { error: noteError } = await client
+          .from(window.SUPABASE_CONFIG.uploadsTable || "guest_uploads")
+          .insert(
+            uploadedPaths.map((filePath) => ({
+              guest_name: guestName || null,
+              message: guestMessage || null,
+              file_path: filePath,
+            }))
+          );
+
+        noteSaved = !noteError;
       }
 
       setUploadStatus(
-        "Yükleme tamamlandı. Fotoğraf ve videolarınız başarıyla kaydedildi. Teşekkür ederiz.",
-        "is-success"
+        noteSaved
+          ? "Yükleme tamamlandı. Fotoğraf ve videolarınız başarıyla kaydedildi. Teşekkür ederiz."
+          : "Fotoğraf ve videolarınız yüklendi, ancak notunuz kaydedilemedi. Teşekkür ederiz.",
+        noteSaved ? "is-success" : "is-error"
       );
       uploadForm.reset();
     } catch (error) {

@@ -1,12 +1,11 @@
-// Yeni Supabase projesi acildiktan sonra url ve anonKey doldurulacak.
-// Bu alanlar bosken fotograf yukleme formu kendini otomatik devre disi birakir.
+// Supabase baglantisi.
+// anonKey tarayiciya gitmek uzere tasarlanmis herkese acik (publishable) anahtardir;
+// guvenlik supabase-policies.sql icindeki RLS politikalari ile saglanir.
 window.SUPABASE_CONFIG = {
-  url: "",
-  anonKey: "",
+  url: "https://okockiqrcwouhqjeqqdz.supabase.co",
+  anonKey: "sb_publishable_NKTi9ofTi6BAquWXePPRyQ_vR0XB7zt",
   bucket: "wedding-media",
   folder: "guest-uploads",
-};
-
-window.SITE_CONFIG = {
-  rsvpEmail: "1emrahbayram@gmail.com",
+  rsvpTable: "rsvps",
+  uploadsTable: "guest_uploads",
 };

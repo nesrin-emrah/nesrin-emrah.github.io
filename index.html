@@ -19,9 +19,52 @@
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💍</text></svg>"
     />
     <link rel="stylesheet" href="./styles.css" />
+    <!-- JS yoksa zarf perdesi siteyi kapatmasin -->
+    <noscript>
+      <style>
+        .envelope-intro { display: none !important; }
+      </style>
+    </noscript>
+    <script>
+      // Zarf acilana kadar kaydirmayi ve hero animasyonlarini beklet.
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("intro-active");
+      }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
+    <!-- Giris: dokununca 3D acilip buyuyerek ekrandan cikan zarf -->
+    <div class="envelope-intro" id="envelope-intro" role="button" tabindex="0"
+         aria-label="Davetiyeyi açmak için dokunun">
+      <div class="intro-glow"></div>
+      <div class="envelope-stage">
+        <div class="envelope">
+          <div class="env-face env-back"></div>
+          <div class="env-card">
+            <span class="env-card-eyebrow">Düğünümüz var!</span>
+            <span class="env-card-names">Nesrin &amp; Emrah</span>
+            <span class="env-card-date">12 · 09 · 2026</span>
+          </div>
+          <div class="env-face env-front">
+            <span class="env-monogram">N <i>&amp;</i> E</span>
+          </div>
+          <div class="env-flap">
+            <div class="env-flap-inner"></div>
+          </div>
+          <div class="env-seal" aria-hidden="true">
+            <span>N&amp;E</span>
+          </div>
+        </div>
+      </div>
+      <p class="envelope-hint">
+        <span class="hint-line"></span>
+        Davetiyeyi açmak için dokunun
+        <span class="hint-line"></span>
+      </p>
+      <div class="hearts" id="hearts" aria-hidden="true"></div>
+    </div>
+
     <div class="page-shell">
       <header class="hero" id="top">
         <div class="hero-texture"></div>

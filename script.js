@@ -337,6 +337,78 @@ if (uploadForm) {
   });
 }
 
+// ---------------------------------------------------------------
+// GIRIS: 3D zarf acilisi
+// ---------------------------------------------------------------
+const envelopeIntro = document.querySelector("#envelope-intro");
+
+if (envelopeIntro) {
+  const heartsWrap = document.querySelector("#hearts");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const HEART_TONES = ["#c2705f", "#d99a86", "#b66d5d", "#e0b48b", "#a8544a"];
+  let opened = false;
+
+  const finishIntro = () => {
+    envelopeIntro.classList.add("is-done");
+    document.documentElement.classList.remove("intro-active");
+  };
+
+  const releaseHearts = () => {
+    if (!heartsWrap) {
+      return;
+    }
+
+    for (let i = 0; i < 26; i += 1) {
+      const heart = document.createElement("i");
+      const size = 10 + Math.random() * 16;
+
+      heart.style.setProperty("--x", `${6 + Math.random() * 88}%`);
+      heart.style.setProperty("--size", `${size}px`);
+      heart.style.setProperty("--tone", HEART_TONES[i % HEART_TONES.length]);
+      heart.style.setProperty("--rise", `${window.innerHeight * (0.6 + Math.random() * 0.55)}px`);
+      heart.style.setProperty("--drift", `${(Math.random() - 0.5) * 220}px`);
+      heart.style.setProperty("--dur", `${2.4 + Math.random() * 1.8}s`);
+      heart.style.setProperty("--delay", `${Math.random() * 0.9}s`);
+      heart.style.setProperty("--peak", `${0.55 + Math.random() * 0.4}`);
+
+      heartsWrap.appendChild(heart);
+    }
+  };
+
+  const openEnvelope = () => {
+    if (opened) {
+      return;
+    }
+
+    opened = true;
+
+    if (reduceMotion) {
+      finishIntro();
+      return;
+    }
+
+    // 1) Kapak acilir, muhur kirilir, kart yukselir
+    envelopeIntro.classList.add("is-opening");
+
+    // 2) Kalpler ucusmaya baslar, zarf buyuyup kameradan gecer
+    window.setTimeout(() => {
+      releaseHearts();
+      envelopeIntro.classList.add("is-flying");
+    }, 1250);
+
+    // 3) Perde kalkar, sitenin kendi akisi baslar
+    window.setTimeout(finishIntro, 2900);
+  };
+
+  envelopeIntro.addEventListener("click", openEnvelope);
+  envelopeIntro.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openEnvelope();
+    }
+  });
+}
+
 const fxReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 if (!fxReducedMotion) {

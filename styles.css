@@ -830,3 +830,408 @@ textarea {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   GIRIS: 3D ZARF
+   Dokununca kapak acilir, kart yukselir, zarf buyuyup
+   kameranin icinden gecerek ekrandan cikar; kalpler ucusur.
+   ============================================================ */
+
+html.intro-active,
+html.intro-active body {
+  overflow: hidden;
+}
+
+/* Zarf acilana kadar hero animasyonlari beklesin ki kacirilmasin */
+html.intro-active .hero-name,
+html.intro-active .sparkles i {
+  animation-play-state: paused;
+}
+
+.envelope-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 42px;
+  cursor: pointer;
+  perspective: 1300px;
+  perspective-origin: 50% 45%;
+  background:
+    radial-gradient(120% 90% at 50% 40%, rgba(255, 250, 242, 0.96) 0%, rgba(243, 232, 219, 0.97) 45%, rgba(214, 194, 172, 0.98) 100%);
+  transition: opacity 900ms ease;
+}
+
+.envelope-intro.is-flying {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.envelope-intro.is-done {
+  display: none;
+}
+
+.intro-glow {
+  position: absolute;
+  width: min(80vw, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 244, 224, 0.9) 0%, rgba(217, 179, 108, 0.14) 45%, transparent 70%);
+  filter: blur(6px);
+  animation: intro-breathe 5s ease-in-out infinite;
+}
+
+@keyframes intro-breathe {
+  0%, 100% { transform: scale(1); opacity: 0.85; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+.envelope-stage {
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.envelope {
+  position: relative;
+  width: min(80vw, 400px);
+  aspect-ratio: 1.5 / 1;
+  transform-style: preserve-3d;
+  transform: rotateX(6deg);
+  transition: transform 500ms ease;
+  animation: env-idle 6s ease-in-out infinite;
+  filter: drop-shadow(0 34px 46px rgba(94, 68, 44, 0.32));
+}
+
+@keyframes env-idle {
+  0%, 100% { transform: rotateX(6deg) translateY(0); }
+  50% { transform: rotateX(4deg) translateY(-10px); }
+}
+
+.envelope-intro:hover .envelope,
+.envelope-intro:focus-visible .envelope {
+  transform: rotateX(2deg) scale(1.03);
+}
+
+/* --- Eskitme kagit yuzeyi (kina tasarimindaki gercek kagit dokusu) --- */
+.env-face,
+.env-flap-inner,
+.env-card {
+  background-color: #efe4d2;
+  background-image:
+    linear-gradient(150deg, rgba(255, 252, 245, 0.85) 0%, rgba(233, 220, 200, 0.5) 48%, rgba(196, 173, 143, 0.42) 100%),
+    url("./assets/design/paper.png");
+  background-size: cover, cover;
+  background-position: center;
+  background-blend-mode: soft-light, normal;
+}
+
+.env-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 34px rgba(126, 98, 62, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.env-back {
+  transform: translateZ(-6px);
+  z-index: 1;
+}
+
+.env-front {
+  transform: translateZ(0);
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 7%;
+  /* Zarfin on kapaginin katlanma cizgileri: iki yandan yukselen ucgen govde */
+  box-shadow:
+    inset 0 0 34px rgba(126, 98, 62, 0.26),
+    inset 0 18px 30px rgba(120, 92, 58, 0.16),
+    0 2px 0 rgba(255, 255, 255, 0.35);
+}
+
+.env-front::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 50% 46%, 100% 0, 100% 3%, 50% 49%, 0 3%);
+  background: rgba(120, 92, 58, 0.16);
+}
+
+.env-monogram {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(0.9rem, 2.6vw, 1.15rem);
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(94, 71, 44, 0.62);
+}
+
+.env-monogram i {
+  font-style: normal;
+  color: rgba(166, 116, 92, 0.75);
+}
+
+/* --- Ust kapak: menteseli, 3D acilan ucgen --- */
+.env-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 56%;
+  transform-origin: top center;
+  transform: translateZ(2px) rotateX(0deg);
+  transform-style: preserve-3d;
+  transition: transform 1100ms cubic-bezier(0.62, 0.02, 0.28, 1);
+  z-index: 4;
+}
+
+.env-flap-inner {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  border-radius: 3px;
+  /* Kapagin govdeden ayrilmasi icin hafif koyu ton ve alt kenar golgesi */
+  box-shadow: inset 0 -26px 30px rgba(112, 84, 50, 0.26);
+  filter: brightness(0.975) saturate(1.04);
+}
+
+.env-flap-inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(184deg, rgba(255, 253, 247, 0.5) 0%, rgba(168, 138, 96, 0.12) 62%, rgba(120, 92, 58, 0.26) 100%);
+}
+
+.envelope-intro.is-opening .env-flap {
+  transform: translateZ(2px) rotateX(-172deg);
+}
+
+/* --- Icindeki davetiye karti --- */
+.env-card {
+  position: absolute;
+  left: 6%;
+  width: 88%;
+  height: 86%;
+  bottom: 7%;
+  border-radius: 3px;
+  transform: translateZ(-3px);
+  transition: transform 1000ms cubic-bezier(0.34, 0.9, 0.3, 1) 380ms;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  border: 1px solid rgba(179, 155, 110, 0.5);
+  box-shadow: 0 8px 22px rgba(96, 70, 44, 0.18);
+  z-index: 2;
+}
+
+.envelope-intro.is-opening .env-card {
+  transform: translateY(-52%) translateZ(60px) rotateX(-3deg);
+  z-index: 6;
+}
+
+.env-card-eyebrow {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #6b5a3a;
+}
+
+.env-card-names {
+  font-family: "Pinyon Script", cursive;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1;
+  color: #2e2418;
+}
+
+.env-card-date {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  color: #5c503c;
+}
+
+/* --- Muhur --- */
+.env-seal {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 21%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%) translateZ(4px);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 34% 30%, #c2705f 0%, #9d4a3c 46%, #7d3529 100%);
+  box-shadow:
+    0 4px 12px rgba(80, 32, 24, 0.42),
+    inset 0 -2px 6px rgba(60, 20, 14, 0.5),
+    inset 0 2px 5px rgba(255, 190, 170, 0.35);
+  z-index: 5;
+  transition: opacity 320ms ease, transform 420ms ease;
+}
+
+.env-seal span {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(0.6rem, 1.9vw, 0.78rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255, 232, 222, 0.92);
+}
+
+.envelope-intro.is-opening .env-seal {
+  opacity: 0;
+  transform: translate(-50%, -50%) translateZ(30px) scale(1.5);
+}
+
+/* --- Ipucu yazisi --- */
+.envelope-hint {
+  position: relative;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #7a6446;
+  animation: hint-pulse 2.4s ease-in-out infinite;
+  transition: opacity 400ms ease;
+}
+
+.hint-line {
+  width: 34px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(166, 132, 84, 0.8), transparent);
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+.envelope-intro.is-opening .envelope-hint {
+  opacity: 0;
+}
+
+/* --- Zarfin buyuyup kameradan gecmesi --- */
+.envelope-intro.is-flying .envelope {
+  animation: env-fly 1500ms cubic-bezier(0.5, 0.02, 0.3, 1) forwards;
+}
+
+@keyframes env-fly {
+  0% {
+    transform: rotateX(6deg) translateZ(0) translateY(0);
+    opacity: 1;
+  }
+  25% {
+    transform: rotateX(2deg) translateZ(-90px) translateY(14px);
+    opacity: 1;
+  }
+  100% {
+    transform: rotateX(-14deg) translateZ(1160px) translateY(-70px);
+    opacity: 0;
+  }
+}
+
+/* --- Kalpler --- */
+.hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hearts i {
+  position: absolute;
+  left: var(--x);
+  bottom: -40px;
+  width: var(--size);
+  height: var(--size);
+  opacity: 0;
+  transform: rotate(-45deg);
+  background: var(--tone);
+  animation: heart-float var(--dur) ease-out var(--delay) forwards;
+}
+
+.hearts i::before,
+.hearts i::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.hearts i::before {
+  top: -50%;
+  left: 0;
+}
+
+.hearts i::after {
+  top: 0;
+  right: -50%;
+}
+
+@keyframes heart-float {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(-45deg) scale(0.4);
+  }
+  12% {
+    opacity: var(--peak);
+  }
+  70% {
+    opacity: var(--peak);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), calc(-1 * var(--rise)), 0) rotate(-45deg) scale(1);
+  }
+}
+
+@media (max-width: 720px) {
+  .envelope-intro {
+    gap: 34px;
+    perspective: 900px;
+  }
+
+  .envelope {
+    width: min(84vw, 340px);
+  }
+
+  .envelope-hint {
+    font-size: 0.64rem;
+    letter-spacing: 0.18em;
+  }
+}
+
+/* Hareket azaltma tercihi: animasyonsuz, dogrudan siteye */
+@media (prefers-reduced-motion: reduce) {
+  .envelope-intro {
+    display: none;
+  }
+
+  html.intro-active,
+  html.intro-active body {
+    overflow: auto;
+  }
+
+  html.intro-active .hero-name,
+  html.intro-active .sparkles i {
+    animation-play-state: running;
+  }
+}

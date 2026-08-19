@@ -391,13 +391,14 @@ if (envelopeIntro) {
     envelopeIntro.classList.add("is-opening");
 
     // 2) Kalpler ucusmaya baslar, zarf buyuyup kameradan gecer
+    //    (kapak 850ms + kart 800ms gecikme/850ms yukselis bittikten sonra)
     window.setTimeout(() => {
       releaseHearts();
       envelopeIntro.classList.add("is-flying");
-    }, 1250);
+    }, 1750);
 
     // 3) Perde kalkar, sitenin kendi akisi baslar
-    window.setTimeout(finishIntro, 2900);
+    window.setTimeout(finishIntro, 3400);
   };
 
   envelopeIntro.addEventListener("click", openEnvelope);

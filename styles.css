@@ -1009,24 +1009,46 @@ html.intro-active .sparkles i {
   background: linear-gradient(184deg, rgba(255, 253, 247, 0.5) 0%, rgba(168, 138, 96, 0.12) 62%, rgba(120, 92, 58, 0.26) 100%);
 }
 
+/* Kapak acilirken yarida bir arkaya gecsin ki acildiktan sonra
+   zarfin onunde serit gibi asili kalmasin */
 .envelope-intro.is-opening .env-flap {
-  transform: translateZ(2px) rotateX(-172deg);
+  animation: flap-open 850ms cubic-bezier(0.62, 0.02, 0.28, 1) forwards;
+}
+
+@keyframes flap-open {
+  0% {
+    transform: translateZ(2px) rotateX(0deg);
+    z-index: 4;
+  }
+  49% {
+    z-index: 4;
+  }
+  50% {
+    z-index: 0;
+  }
+  100% {
+    transform: translateZ(2px) rotateX(-168deg);
+    z-index: 0;
+  }
 }
 
 /* --- Icindeki davetiye karti --- */
 .env-card {
   position: absolute;
-  left: 6%;
-  width: 88%;
-  height: 86%;
-  bottom: 7%;
+  left: 11%;
+  width: 78%;
+  height: 84%;
+  bottom: 8%;
   border-radius: 3px;
   transform: translateZ(-3px);
-  transition: transform 1000ms cubic-bezier(0.34, 0.9, 0.3, 1) 380ms;
+  /* Kapak tamamen acilmadan (850ms) kart kipirdamasin */
+  transition: transform 850ms cubic-bezier(0.34, 0.9, 0.3, 1) 800ms;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* Yazi kartin UST kismina: zarftan cikan bolum bu, okunur kalsin */
+  justify-content: flex-start;
+  padding-top: 9%;
   gap: 6px;
   text-align: center;
   border: 1px solid rgba(179, 155, 110, 0.5);
@@ -1034,9 +1056,10 @@ html.intro-active .sparkles i {
   z-index: 2;
 }
 
+/* Kart on cebin ARKASINDAN yukseliyor (z-index 2 < on yuz 3):
+   iceride kalan kismi gorunmuyor, gercek zarf gibi. */
 .envelope-intro.is-opening .env-card {
-  transform: translateY(-52%) translateZ(60px) rotateX(-3deg);
-  z-index: 6;
+  transform: translateY(-72%) translateZ(20px);
 }
 
 .env-card-eyebrow {

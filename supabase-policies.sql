@@ -35,9 +35,11 @@ create table if not exists public.rsvps (
     check (char_length(btrim(full_name)) between 2 and 100),
   constraint rsvps_attendance_valid
     check (attendance in ('Evet', 'Hayır')),
-  -- Katilacaksa kisi sayisi zorunlu, katilmiyorsa bos olmali
+  -- Katilacaksa kisi sayisi zorunlu, katilmiyorsa bos olmali.
+  -- "guest_count is not null" sarti onemli: Postgres'te CHECK ifadesi NULL
+  -- donerse kisit GECERLI sayilir, bu yuzden NULL durumu acikca yakalanmali.
   constraint rsvps_guest_count_valid check (
-    (attendance = 'Evet' and guest_count between 1 and 10)
+    (attendance = 'Evet' and guest_count is not null and guest_count between 1 and 10)
     or (attendance = 'Hayır' and guest_count is null)
   )
 );
